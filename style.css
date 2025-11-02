@@ -1,0 +1,59 @@
+/* style.css */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+}
+
+
+h2, h3, h5 {
+  color: #155724;
+}
+
+header h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.navbar-brand {
+  font-size: 1.2rem;
+}
+
+.table {
+  margin-top: 20px;
+  background-color: white;
+}
+
+.form-section {
+  margin: 20px 0;
+}
+
+button {
+  margin-top: 10px;
+}
+
+.card {
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+th, td {
+  vertical-align: middle !important;
+}
+
+#installBanner {
+  z-index: 2000;
+  animation: slideUp 0.6s ease-in-out;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.chart-container {
+   position: relative; height: 350px;
+   }
+

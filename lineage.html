@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pig Lineage Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="index.html">🐖 Riels Pig Management System</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="./pigs.html">Pigs</a></li>
+          <li class="nav-item"><a class="nav-link" href="./feeding.html">Feeding</a></li>
+          <li class="nav-item"><a class="nav-link" href="./vaccination.html">Vaccination</a></li>
+          <li class="nav-item"><a class="nav-link" href="./reproduction.html">Reproduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="./lineage.html">Lineage</a></li>
+          <li class="nav-item"><a class="nav-link" href="./finance.html">Finance</a></li>
+          <li class="nav-item"><a class="nav-link" href="./reports.html">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h3 class="fw-bold text-success mb-3">🐖 Pig Birth & Lineage Tracker</h3>
+    <div id="lineageList" class="row g-3"></div>
+  </div>
+
+
+
+   <script src="./main.js"></script>
+<script>
+    /*Lineage js*/
+    const pigs = JSON.parse(localStorage.getItem('pigs')) || [];
+
+    const lineageContainer = document.getElementById('lineageList');
+    const mothers = pigs.filter(p => p.gender === 'Female' && p.piglets && p.piglets.length > 0);
+
+    if (mothers.length === 0) {
+      lineageContainer.innerHTML = `<div class='alert alert-info'>No lineage records found. Add piglets and link to mothers in Pig Records.</div>`;
+    } else {
+      mothers.forEach(mother => {
+        const piglets = mother.piglets.map(pid => pigs.find(p => p.id === pid)).filter(Boolean);
+        const pigletList = piglets.map(p => `
+          <li class="list-group-item">
+            <strong>${p.name}</strong> — Born: ${p.dob} | Gender: ${p.gender} | Status: ${p.status || 'Alive'}
+          </li>`).join('');
+
+        const card = `
+          <div class="col-md-6">
+            <div class="card border-success shadow-sm">
+              <div class="card-header bg-success text-white fw-bold">
+                Mother: ${mother.name} (${mother.id})
+              </div>
+              <div class="card-body">
+                <p><strong>Breed:</strong> ${mother.breed || 'N/A'}</p>
+                <p><strong>Births:</strong> ${piglets.length}</p>
+                <ul class="list-group">${pigletList}</ul>
+              </div>
+            </div>
+          </div>
+        `;
+        lineageContainer.innerHTML += card;
+      });
+    }
+</script>
+
+ <script src="./main.js"></script>
+<script src="./manifest.json"></script>
+
+  
+
+  
+</body>
+</html>

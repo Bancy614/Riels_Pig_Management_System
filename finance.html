@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance - Pig Management System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css"> 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light">
+
+  <!-- 🔗 Navigation -->
+ <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="index.html">🐖 Riels Pig Management System</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="./pigs.html">Pigs</a></li>
+          <li class="nav-item"><a class="nav-link" href="./feeding.html">Feeding</a></li>
+          <li class="nav-item"><a class="nav-link" href="./vaccination.html">Vaccination</a></li>
+          <li class="nav-item"><a class="nav-link" href="./reproduction.html">Reproduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="./lineage.html">Lineage</a></li>
+          <li class="nav-item"><a class="nav-link" href="./finance.html">Finance</a></li>
+          <li class="nav-item"><a class="nav-link" href="./reports.html">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h3 class="text-center mb-4">💰 Farm Finance Overview</h3>
+
+    <!-- 📦 Section 1: Purchases -->
+
+    <div class="card mb-4">
+      <div class="card-header bg-success text-white">Purchases</div>
+      <div class="card-body">
+        <form id="purchaseForm" class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Item Type</label>
+            <select id="purchaseType" class="form-select" required>
+              <option value="">Select Type</option>
+              <option value="pig">Pig Purchase</option>
+              <option value="feed">Feed Purchase</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Amount (Ksh)</label>
+            <input type="number" id="purchaseAmount" class="form-control" required>
+          </div>
+          <div class="col-md-4 align-self-end">
+            <button class="btn btn-success w-100" type="submit">Add Purchase</button>
+          </div>
+
+          <div class="col-md-3 d-flex align-items-end">
+           
+            <button type="submit" class="btn btn-success w-100 me-2">Edit</button>
+            
+            <button type="submit" class="btn btn-success w-100">Save</button>
+          </div>
+        </form>
+
+        <hr>
+        <table class="table table-sm table-bordered mt-3">
+          <thead class="table-success">
+            <tr>
+              <th>Type</th>
+              <th>Amount (Ksh)</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="purchaseTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 💡 Section 2: Operational Costs -->
+    <div class="card mb-4">
+      <div class="card-header bg-success text-white">Operational Costs</div>
+      <div class="card-body">
+        <form id="expenseForm" class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Category</label>
+            <select id="expenseCategory" class="form-select" required>
+              <option value="">Select Category</option>
+              <option value="utilities">Utilities</option>
+              <option value="labour">Labour</option>
+               <option value="vetinary">Vetinary</option>
+              <option value="insurance">Insurance</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Amount (Ksh)</label>
+            <input type="number" id="expenseAmount" class="form-control" required>
+          </div>
+          <div class="col-md-4 align-self-end">
+            <button class="btn btn-success w-100" type="submit">Add Expense</button>
+          </div>
+
+          <div class="col-md-3 d-flex align-items-end">
+           
+            <button type="submit" class="btn btn-success w-100 me-2">Edit</button>
+            
+            <button type="submit" class="btn btn-success w-100">Save</button>
+          </div>
+
+
+        </form>
+
+        <hr>
+        <table class="table table-sm table-bordered mt-3">
+          <thead class="table-success">
+            <tr>
+              <th>Category</th>
+              <th>Amount (Ksh)</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="expenseTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 📊 Section 3: Financial Summary -->
+    <div class="card mb-4">
+      <div class="card-header bg-success text-white">Financial Summary</div>
+      <div class="card-body">
+        <div class="row text-center mb-3">
+          <div class="col-md-4">
+            <h6>Total Revenue (Sales)</h6>
+            <h5 id="totalSales">Ksh 0</h5>
+          </div>
+          <div class="col-md-4">
+            <h6>Cost of Goods Sold (COGS)</h6>
+            <h5 id="totalCOGS">Ksh 0</h5>
+          </div>
+          <div class="col-md-4">
+            <h6>Operational Expenses</h6>
+            <h5 id="totalExpenses">Ksh 0</h5>
+          </div>
+        </div>
+        <hr>
+        <div class="row text-center">
+          <div class="col-md-6">
+            <h5 class="text-primary">Gross Profit:</h5>
+            <h4 id="grossProfit">Ksh 0</h4>
+          </div>
+          <div class="col-md-6">
+            <h5 class="text-success">Net Profit:</h5>
+            <h4 id="netProfit">Ksh 0</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <script>
+    /*finance js */
+
+// Load Data
+    const purchases = JSON.parse(localStorage.getItem('purchases')) || [];
+    const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+    const sales = JSON.parse(localStorage.getItem('sales')) || [];
+
+    const purchaseForm = document.getElementById('purchaseForm');
+    const expenseForm = document.getElementById('expenseForm');
+    const purchaseTableBody = document.getElementById('purchaseTableBody');
+    const expenseTableBody = document.getElementById('expenseTableBody');
+
+    const totalSalesEl = document.getElementById('totalSales');
+    const totalCOGSEl = document.getElementById('totalCOGS');
+    const totalExpensesEl = document.getElementById('totalExpenses');
+    const grossProfitEl = document.getElementById('grossProfit');
+    const netProfitEl = document.getElementById('netProfit');
+
+    // 🛒 Add Purchase
+    purchaseForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const type = document.getElementById('purchaseType').value;
+      const amount = parseFloat(document.getElementById('purchaseAmount').value);
+      const date = new Date().toLocaleDateString();
+
+      purchases.push({ type, amount, date });
+      localStorage.setItem('purchases', JSON.stringify(purchases));
+      purchaseForm.reset();
+      renderTables();
+      calculateSummary();
+    });
+
+    // 💡 Add Expense
+    expenseForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const category = document.getElementById('expenseCategory').value;
+      const amount = parseFloat(document.getElementById('expenseAmount').value);
+      const date = new Date().toLocaleDateString();
+
+      expenses.push({ category, amount, date });
+      localStorage.setItem('expenses', JSON.stringify(expenses));
+      expenseForm.reset();
+      renderTables();
+      calculateSummary();
+    });
+
+    // 🧾 Render Tables
+    function renderTables() {
+      purchaseTableBody.innerHTML = purchases.map(p => 
+        `<tr><td>${p.type}</td><td>${p.amount}</td><td>${p.date}</td></tr>`
+      ).join('');
+      expenseTableBody.innerHTML = expenses.map(e => 
+        `<tr><td>${e.category}</td><td>${e.amount}</td><td>${e.date}</td></tr>`
+      ).join('');
+    }
+
+    // 💰 Calculate Financial Summary
+    function calculateSummary() {
+      const totalSales = sales.reduce((sum, s) => sum + (s.amount || 0), 0);
+      const totalCOGS = purchases.reduce((sum, p) => sum + p.amount, 0);
+      const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+      const grossProfit = totalSales - totalCOGS;
+      const netProfit = grossProfit - totalExpenses;
+
+      totalSalesEl.textContent = `Ksh ${totalSales.toLocaleString()}`;
+      totalCOGSEl.textContent = `Ksh ${totalCOGS.toLocaleString()}`;
+      totalExpensesEl.textContent = `Ksh ${totalExpenses.toLocaleString()}`;
+      grossProfitEl.textContent = `Ksh ${grossProfit.toLocaleString()}`;
+      netProfitEl.textContent = `Ksh ${netProfit.toLocaleString()}`;
+    }
+
+    renderTables();
+    calculateSummary();
+
+    /* fincance chart*/
+   
+  const ctxRevenueExpense = document.getElementById('revenueExpenseChart').getContext('2d');
+  const ctxProfitTrend = document.getElementById('profitTrendChart').getContext('2d');
+
+  let revenueExpenseChart;
+  let profitTrendChart;
+
+  // Helper function to extract monthly totals
+  function groupByMonth(data, key) {
+    const map = {};
+    data.forEach(item => {
+      const month = new Date(item.date).toLocaleString('default', { month: 'short', year: 'numeric' });
+      if (!map[month]) map[month] = 0;
+      map[month] += parseFloat(item[key] || item.amount || 0);
+    });
+    return map;
+  }
+
+  function loadFinanceDataAndRenderCharts() {
+    const purchases = JSON.parse(localStorage.getItem('purchases')) || [];
+    const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+    const sales = JSON.parse(localStorage.getItem('sales')) || [];
+
+    // Group data monthly
+    const salesByMonth = groupByMonth(sales, 'amount');
+    const expensesByMonth = groupByMonth(expenses, 'amount');
+    const purchasesByMonth = groupByMonth(purchases, 'amount');
+
+    // Merge all month labels
+    const allMonths = Array.from(new Set([...Object.keys(salesByMonth), ...Object.keys(expensesByMonth), ...Object.keys(purchasesByMonth)])).sort((a,b) => new Date(a) - new Date(b));
+
+    const revenueData = allMonths.map(m => salesByMonth[m] || 0);
+    const totalExpensesData = allMonths.map(m => (expensesByMonth[m] || 0) + (purchasesByMonth[m] || 0));
+    const profitData = allMonths.map((rev, i) => rev - totalExpensesData[i]);
+
+    // Destroy old charts (to avoid duplicates)
+    if (revenueExpenseChart) revenueExpenseChart.destroy();
+    if (profitTrendChart) profitTrendChart.destroy();
+
+    // Chart 1: Revenue vs Expenses
+    revenueExpenseChart = new Chart(ctxRevenueExpense, {
+      type: 'bar',
+      data: {
+        labels: allMonths,
+        datasets: [
+          {
+            label: 'Revenue (Sales)',
+            data: revenueData,
+            backgroundColor: 'rgba(40, 167, 69, 0.7)',
+            borderColor: '#198754',
+            borderWidth: 1
+          },
+          {
+            label: 'Expenses + COGS',
+            data: totalExpensesData,
+            backgroundColor: 'rgba(220, 53, 69, 0.7)',
+            borderColor: '#dc3545',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Monthly Revenue vs Expenses',
+            font: { size: 16 }
+          },
+          legend: { position: 'bottom' }
+        },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // Chart 2: Profit Trend
+    profitTrendChart = new Chart(ctxProfitTrend, {
+      type: 'line',
+      data: {
+        labels: allMonths,
+        datasets: [{
+          label: 'Net Profit',
+          data: profitData,
+          fill: true,
+          borderColor: '#0d6efd',
+          backgroundColor: 'rgba(13, 110, 253, 0.2)',
+          tension: 0.3,
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Monthly Profit Trend',
+            font: { size: 16 }
+          },
+          legend: { position: 'bottom' }
+        },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  }
+
+  // 🧠 Real-Time Updates — whenever data changes
+  window.addEventListener('storage', (event) => {
+    if (['sales', 'purchases', 'expenses'].includes(event.key)) {
+      loadFinanceDataAndRenderCharts();
+    }
+  });
+
+  // Initial load
+  document.addEventListener('DOMContentLoaded', loadFinanceDataAndRenderCharts);
+
+  // When you save finance data
+function saveFinanceData() {
+  const financeData = getFinanceTableData(); // e.g., read from table or form
+  localStorage.setItem('financeData', JSON.stringify(financeData));
+
+  // Trigger custom event for live updates
+  localStorage.setItem('financeData_updated', Date.now());
+}
+  </script>
+
+   <script src="./main.js"></script>
+<script src="./manifest.json"></script>
+
+
+  
+
+
+  </body>
+</html>

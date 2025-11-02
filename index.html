@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pig Management Dashboard</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#28a745">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="index.html">🐖 Riels Pig Management System</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="./pigs.html">Pigs</a></li>
+          <li class="nav-item"><a class="nav-link" href="./feeding.html">Feeding</a></li>
+          <li class="nav-item"><a class="nav-link" href="./vaccination.html">Vaccination</a></li>
+          <li class="nav-item"><a class="nav-link" href="./reproduction.html">Reproduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="./lineage.html">Lineage</a></li>
+          <li class="nav-item"><a class="nav-link" href="./finance.html">Finance</a></li>
+          <li class="nav-item"><a class="nav-link" href="./reports.html">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <h3 class="mb-3 fw-bold text-success">Dashboard Overview</h3>
+
+    <div class="row text-center mb-4">
+      <div class="col-md-3">
+        <div class="card shadow-sm border-success">
+          <div class="card-body">
+            <h6>Total Pigs</h6>
+            <h3 id="totalPigs" class="fw-bold text-success">0</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card shadow-sm border-success">
+          <div class="card-body">
+            <h6>Male Pigs</h6>
+            <h3 id="malePigs" class="fw-bold text-primary">0</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card shadow-sm border-success">
+          <div class="card-body">
+            <h6>Female Pigs</h6>
+            <h3 id="femalePigs" class="fw-bold text-danger">0</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card shadow-sm border-success">
+          <div class="card-body">
+            <h6>Profit</h6>
+            <h3 id="totalProfit" class="fw-bold text-success">Ksh 0</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+    <h3 class="mb-3 fw-bold text-success">Dashboard Overview</h3>
+
+    <div id="summaryCards" class="row text-center mb-4"></div>
+
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <canvas id="populationChart"></canvas>
+      </div>
+      <div class="col-md-6 mb-4">
+        <canvas id="genderChart"></canvas>
+      </div>
+      <div class="col-md-12 mb-4">
+        <canvas id="profitChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="alert alert-warning mt-3" id="reminderAlerts">
+  <h6 class="fw-bold">⚠️ Upcoming Reminders</h6>
+  <ul id="alertList" class="mb-0"></ul>
+</div>
+
+    <!-- Charts Section -->
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-success text-white fw-bold">
+            Pig Population Trend
+          </div>
+          <div class="card-body">
+            <canvas id="populationChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-success text-white fw-bold">
+            Gender Ratio
+          </div>
+          <div class="card-body">
+            <canvas id="genderChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <!-- 📈 Finance Overview Section -->
+<div class="card mb-4">
+  <div class="card-header bg-success text-white">📊 Finance Overview</div>
+  <div class="card-body">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <canvas id="revenueExpenseChart" height="180"></canvas>
+      </div>
+      <div class="col-md-6">
+        <canvas id="profitTrendChart" height="180"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <div class="row mb-4">
+      <div class="col-md-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-success text-white fw-bold">
+            Profit Analysis
+          </div>
+          <div class="card-body">
+            <canvas id="profitChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 🏠 Add to Home Screen Banner -->
+<div id="installBanner" class="d-none position-fixed bottom-0 start-0 end-0 bg-success text-white p-3 shadow-lg rounded-top">
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h5 class="mb-1">Install Pig Management App</h5>
+      <p class="mb-0 small">Get faster access and use offline!</p>
+    </div>
+    <div>
+      <button id="installBtn" class="btn btn-light btn-sm me-2">Install</button>
+      <button id="closeBanner" class="btn btn-outline-light btn-sm">Close</button>
+    </div>
+  </div>
+</div>
+
+  <!-- 🔔 Audio Alert -->
+<audio id="alertSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
+
+
+
+
+ <script src="./main.js"></script>
+<script src="./manifest.json"></script>
+
+
+</body>
+</html>
+

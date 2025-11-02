@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reproduction Management | Pig Farm</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light">
+
+   <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="index.html">🐖 Riels Pig Management System</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="./pigs.html">Pigs</a></li>
+          <li class="nav-item"><a class="nav-link" href="./feeding.html">Feeding</a></li>
+          <li class="nav-item"><a class="nav-link" href="./vaccination.html">Vaccination</a></li>
+          <li class="nav-item"><a class="nav-link" href="./reproduction.html">Reproduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="./lineage.html">Lineage</a></li>
+          <li class="nav-item"><a class="nav-link" href="./finance.html">Finance</a></li>
+          <li class="nav-item"><a class="nav-link" href="./reports.html">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <h2 class="text-center mb-4 fw-bold text-success">Reproduction Management</h2>
+
+    <!-- Record Mating/Heat -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title text-success">Record Mating / Heat</h5>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Select Mother Pig</label>
+            <select id="motherId" class="form-select"></select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Date of Heat</label>
+            <input type="date" id="heatDate" class="form-control">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Remarks (Behavior)</label>
+            <select id="remarks" class="form-select">
+              <option value="Good Mother">Good Mother</option>
+              <option value="Unreliable Mother">Unreliable Mother</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-success mt-3" onclick="saveHeat()">Save Record</button>
+      </div>
+    </div>
+
+    <!-- Predict Next Heat -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title text-success">Predicted Next Heat Dates</h5>
+        <table class="table table-bordered table-striped" id="heatTable">
+          <thead class="table-success">
+            <tr>
+              <th>Mother ID</th>
+              <th>Mother Name</th>
+              <th>Last Heat</th>
+              <th>Next Heat</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Record Birth -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title text-success">Record Birth</h5>
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">Select Mother Pig</label>
+            <select id="birthMotherId" class="form-select"></select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Date of Birth</label>
+            <input type="date" id="birthDate" class="form-control">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Sex</label>
+            <select id="pigletSex" class="form-select">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Status</label>
+            <select id="pigletStatus" class="form-select">
+              <option value="Alive">Alive</option>
+              <option value="Dead">Dead</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">No. of Piglets</label>
+            <input type="number" id="pigletCount" class="form-control" min="1">
+          </div>
+        </div>
+        <button class="btn btn-success mt-3" onclick="saveBirth()">Save Birth Record</button>
+      </div>
+    </div>
+
+    <!-- Piglets Table -->
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title text-success">Piglet Records</h5>
+        <table class="table table-bordered table-striped" id="pigletTable">
+          <thead class="table-success">
+            <tr>
+              <th>Mother ID</th>
+              <th>Mother Name</th>
+              <th>Date of Birth</th>
+              <th>Sex</th>
+              <th>Status</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+
+
+<div class="container mt-4">
+  <h3 class="text-center fw-bold mb-4">Reproduction & Piglet Tracking</h3>
+
+  <form id="reproForm" class="card p-3 shadow-sm">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <label>Mother ID</label>
+        <input type="text" id="motherId" class="form-control" required>
+      </div>
+      <div class="col-md-3">
+        <label>Mating Date</label>
+        <input type="date" id="matingDate" class="form-control" required>
+      </div>
+      <div class="col-md-3">
+        <label>Farrowing Date</label>
+        <input type="date" id="farrowDate" class="form-control">
+      </div>
+      <div class="col-md-3">
+        <label>Remarks</label>
+        <select id="remarks" class="form-control">
+          <option>Good Mother</option>
+          <option>Unreliable Mother</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-success mt-3">Generate Schedule</button>
+  </form>
+
+  <div id="reproResult" class="mt-4"></div>
+</div>
+
+
+
+  <script>
+    /*reproduction js*/
+    let pigs = JSON.parse(localStorage.getItem('pigs')) || [];
+    let heats = JSON.parse(localStorage.getItem('heats')) || [];
+    let piglets = JSON.parse(localStorage.getItem('piglets')) || [];
+
+    const motherSelect = document.getElementById('motherId');
+    const birthMotherSelect = document.getElementById('birthMotherId');
+
+    // Populate mother dropdowns
+    function loadMothers() {
+      motherSelect.innerHTML = '';
+      birthMotherSelect.innerHTML = '';
+      pigs.forEach(pig => {
+        const option = `<option value="${pig.id}">${pig.name}</option>`;
+        motherSelect.innerHTML += option;
+        birthMotherSelect.innerHTML += option;
+      });
+    }
+
+    loadMothers();
+
+    // Predict next heat
+    function predictNextHeat(lastHeatDate) {
+      const d = new Date(lastHeatDate);
+      d.setDate(d.getDate() + 21); // heat cycle ~21 days
+      return d.toISOString().split('T')[0];
+    }
+
+    function saveHeat() {
+      const motherId = motherSelect.value;
+      const heatDate = document.getElementById('heatDate').value;
+      const remarks = document.getElementById('remarks').value;
+      const nextHeat = predictNextHeat(heatDate);
+      heats.push({ motherId, heatDate, nextHeat, remarks });
+      localStorage.setItem('heats', JSON.stringify(heats));
+      displayHeats();
+    }
+
+    function displayHeats() {
+      const tbody = document.querySelector('#heatTable tbody');
+      tbody.innerHTML = '';
+      heats.forEach(h => {
+        const mother = pigs.find(p => p.id === h.motherId);
+        const row = `<tr>
+          <td>${h.motherId}</td>
+          <td>${mother ? mother.name : 'Unknown'}</td>
+          <td>${h.heatDate}</td>
+          <td>${h.nextHeat}</td>
+          <td>${h.remarks}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    function saveBirth() {
+      const motherId = document.getElementById('birthMotherId').value;
+      const dob = document.getElementById('birthDate').value;
+      const sex = document.getElementById('pigletSex').value;
+      const status = document.getElementById('pigletStatus').value;
+      const count = parseInt(document.getElementById('pigletCount').value);
+
+      piglets.push({ motherId, dob, sex, status, count });
+      localStorage.setItem('piglets', JSON.stringify(piglets));
+      displayPiglets();
+    }
+
+    function displayPiglets() {
+      const tbody = document.querySelector('#pigletTable tbody');
+      tbody.innerHTML = '';
+      piglets.forEach(p => {
+        const mother = pigs.find(m => m.id === p.motherId);
+        const row = `<tr>
+          <td>${p.motherId}</td>
+          <td>${mother ? mother.name : 'Unknown'}</td>
+          <td>${p.dob}</td>
+          <td>${p.sex}</td>
+          <td>${p.status}</td>
+          <td>${p.count}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    displayHeats();
+    displayPiglets();
+
+
+    document.getElementById('reproForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const motherId = document.getElementById('motherId').value;
+  const matingDate = new Date(document.getElementById('matingDate').value);
+  const remarks = document.getElementById('remarks').value;
+
+  const expectedFarrow = new Date(matingDate);
+  expectedFarrow.setDate(matingDate.getDate() + 114); // average gestation = 114 days
+
+  const nextHeat = new Date(matingDate);
+  nextHeat.setDate(matingDate.getDate() + 21); // next heat if not pregnant
+
+  document.getElementById('reproResult').innerHTML = `
+    <div class="card p-3 shadow-sm">
+      <h5 class="text-success">Mother ID: ${motherId}</h5>
+      <ul>
+        <li><b>Expected Farrowing:</b> ${expectedFarrow.toDateString()}</li>
+        <li><b>Next Heat (if missed):</b> ${nextHeat.toDateString()}</li>
+        <li><b>Remarks:</b> ${remarks}</li>
+      </ul>
+    </div>
+  `;
+});
+  </script>
+
+ <script src="./main.js"></script>
+<script src="./manifest.json"></script>
+
+  
+
+</body>
+</html>
